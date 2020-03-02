@@ -14,11 +14,7 @@ def err_info4mip(mip):
     acc.append("Virtual env: %s" % venv())
     acc.append("Path to mod: %s" % file4mip(mip)[len(venv()):])
     return '\n'.join(acc)
-def SAFECALL(name):
-    if not name=='__main__':
-        raise BaseException('Not indirectly importable')
-    if not 'activate' in os.listdir(os.path.dirname(sys.executable)):
-        raise BaseException('Virtulal environment required')
+
 def is_venv():          return 'activate' in os.listdir( venv()+'/bin' )
 def STDERR(x):          return sys.stderr.write( str(x) + '\n' )
 def subparser4mip(mip): return _IMP(mip+'.__config').argparse_subparser
