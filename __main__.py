@@ -1,12 +1,13 @@
 #---------------------------------------------------------
-# If we are not imported directly, raise an exception.
+# We have been imported directly, right?
+# If not then bail with an exception.
 
 if not __name__=='__main__':
     raise BaseException( 'Must be imported directly' )
 
 #---------------------------------------------------------
-# If our first argument is '__exit__' exit immediately
-# with an error code determined by our second argumentr.
+# If our first arg is '__exit__' then we exit immediately
+# with error code determined by our second argument.
 
 import sys
 
@@ -18,19 +19,26 @@ if sys.argv[1:2] == [ '__exit__' ]:
     exit(err)
 
 #---------------------------------------------------------
-# Consult argparse and act acordingly.
+# We will avoid autoimport of argparsers in this most 
+# of scripts and construct our own in situ.
 
-import r20.direct_import as DIRECT
+from argparse import ArgumentParser
+PARSER=ArgumentParser( add_help=False )
+PARSER.add_argument( 'args', action='store', nargs='*')
+PARSER.add_argument( '--info', action='store_true')
 
-mip=__package__
+#---------------------------------------------------------
+# We will import a few helper functios fron direct_import
 
-info_msg = DIRECT.err_info4mip(mip)
-help_msg = DIRECT.err_try4mip(mip)
-parser   = DIRECT.parser4mip(mip)
-write    = DIRECT.STDERR
+import r20.direct_import as D
+help_msg = D. help_msg_4_mip (__package__)
+info_msg = D. info_msg_4_mip (__package__)
+write    = D.  stderr_writer
 
-o=parser.parse_args()
+#---------------------------------------------------------
+# We will parse our arguments and act accordingly
 
+o=PARSER.parse_args()
 if o.info:
     write( info_msg )
 else:
