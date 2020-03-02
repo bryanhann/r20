@@ -1,15 +1,19 @@
-from argparse import ArgumentParser as _PAR
-from importlib import import_module as _IMP
-from os.path import dirname as _DIR
+import argparse
+import importlib
 import os
 import sys
 
-_INFO="""This is an RXX package.
-Module path: %s
-Virtual env: %s
-Path to mod: %s
-"""
+_PAR = argparse.ArgumentParser
+_IMP = importlib.import_module 
+_DIR = os.path.dirname
 
+def err_info4mip(mip):
+    acc=[]
+    acc.append("This is an RXX package.")
+    acc.append("Module path: %s" % mip)
+    acc.append("Virtual env: %s" % venv())
+    acc.append("Path to mod: %s" % file4mip(mip)[len(venv()):])
+    return '\n'.join(acc)
 def SAFECALL(name):
     if not name=='__main__':
         raise BaseException('Not indirectly importable')
@@ -21,5 +25,4 @@ def subparser4mip(mip): return _IMP(mip+'.__config').argparse_subparser
 def parser4mip(mip):    return _PAR(parents=[subparser4mip(mip)], prog='python3 -m %s' % mip,)
 def venv():             return _DIR(_DIR(sys.executable))
 def file4mip(mip):      return _IMP(mip).__file__
-def err_info4mip(mip):  return _INFO %  (mip, venv(), file4mip(mip)[len(venv()):] )
 def err_try4mip(mip):   return "try: python -m %s -h" % mip
