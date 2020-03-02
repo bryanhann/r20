@@ -15,7 +15,7 @@ def SAFECALL(name):
         raise BaseException('Not indirectly importable')
     if not 'activate' in os.listdir(os.path.dirname(sys.executable)):
         raise BaseException('Virtulal environment required')
-
+def is_venv():          return 'activate' in os.listdir( venv()+'/bin' )
 def STDERR(x):          return sys.stderr.write( str(x) + '\n' )
 def subparser4mip(mip): return _IMP(mip+'.__config').argparse_subparser
 def parser4mip(mip):    return _PAR(parents=[subparser4mip(mip)], prog='python3 -m %s' % mip,)
